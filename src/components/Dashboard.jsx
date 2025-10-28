@@ -4,6 +4,8 @@ import Sidebar from './Sidebar'
 import Header from './Header'
 import MoodModal from './MoodModal'
 import JournalModal from './JournalModal'
+import CommunityPage from './CommunityPage'
+import TherapistsPage from './TherapistsPage'
 
 export default function Dashboard({ userRole, onLogout }) {
   const [activeTab, setActiveTab] = useState('overview')
@@ -79,42 +81,46 @@ export default function Dashboard({ userRole, onLogout }) {
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back! 👋</h1>
         <p className="text-gray-600 mb-8">Your emotional wellness overview</p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center"><Heart className="w-6 h-6 text-emerald-600" /></div>
-              <span className="text-sm font-semibold text-emerald-600">+12%</span>
+        {activeTab === 'overview' && (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center"><Heart className="w-6 h-6 text-emerald-600" /></div>
+                  <span className="text-sm font-semibold text-emerald-600">+12%</span>
+                </div>
+                <p className="text-2xl font-bold text-gray-900">{moodEntries.length}</p>
+                <p className="text-sm text-gray-600">Mood Check-ins</p>
+              </div>
+
+              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center"><Book className="w-6 h-6 text-emerald-600" /></div>
+                  <span className="text-sm font-semibold text-emerald-600">+{journalEntries.length}</span>
+                </div>
+                <p className="text-2xl font-bold text-gray-900">{journalEntries.length}</p>
+                <p className="text-sm text-gray-600">Journal Entries</p>
+              </div>
+
+              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <div className="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center mb-4"><MessageSquare className="w-6 h-6 text-emerald-600" /></div>
+                <p className="text-2xl font-bold text-gray-900">3</p>
+                <p className="text-sm text-gray-600">Groups Joined</p>
+              </div>
+
+              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center"><TrendingUp className="w-6 h-6 text-emerald-600" /></div>
+                  <span className="text-sm font-semibold text-emerald-600">+5%</span>
+                </div>
+                <p className="text-2xl font-bold text-gray-900">78%</p>
+                <p className="text-sm text-gray-600">Wellness Score</p>
+              </div>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{moodEntries.length}</p>
-            <p className="text-sm text-gray-600">Mood Check-ins</p>
-          </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center"><Book className="w-6 h-6 text-emerald-600" /></div>
-              <span className="text-sm font-semibold text-emerald-600">+{journalEntries.length}</span>
-            </div>
-            <p className="text-2xl font-bold text-gray-900">{journalEntries.length}</p>
-            <p className="text-sm text-gray-600">Journal Entries</p>
-          </div>
-
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center mb-4"><MessageSquare className="w-6 h-6 text-emerald-600" /></div>
-            <p className="text-2xl font-bold text-gray-900">3</p>
-            <p className="text-sm text-gray-600">Groups Joined</p>
-          </div>
-
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center"><TrendingUp className="w-6 h-6 text-emerald-600" /></div>
-              <span className="text-sm font-semibold text-emerald-600">+5%</span>
-            </div>
-            <p className="text-2xl font-bold text-gray-900">78%</p>
-            <p className="text-sm text-gray-600">Wellness Score</p>
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl p-6 text-white mb-8"><h3 className="font-bold text-lg mb-2">Quick Actions</h3><div className="flex space-x-4"><button onClick={() => setShowMoodModal(true)} className="px-6 py-3 rounded-lg font-semibold" style={{backgroundColor: '#FF7A59'}}>Log Mood</button><button onClick={() => setShowJournalModal(true)} className="px-6 py-3 bg-white text-emerald-600 rounded-lg font-semibold">Write Journal</button></div></div>
+            <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl p-6 text-white mb-8"><h3 className="font-bold text-lg mb-2">Quick Actions</h3><div className="flex space-x-4"><button onClick={() => setShowMoodModal(true)} className="px-6 py-3 rounded-lg font-semibold" style={{backgroundColor: '#FF7A59'}}>Log Mood</button><button onClick={() => setShowJournalModal(true)} className="px-6 py-3 bg-white text-emerald-600 rounded-lg font-semibold">Write Journal</button></div></div>
+          </>
+        )}
 
         {activeTab === 'mood' && (
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
@@ -167,6 +173,14 @@ export default function Dashboard({ userRole, onLogout }) {
               )}
             </div>
           </div>
+        )}
+
+        {activeTab === 'community' && (
+          <CommunityPage />
+        )}
+
+        {activeTab === 'therapists' && (
+          <TherapistsPage />
         )}
 
         {showMoodModal && (<MoodModal onClose={() => setShowMoodModal(false)} onSave={(mood) => { setMoodEntries([...moodEntries, mood]); setShowMoodModal(false); }} />)}
