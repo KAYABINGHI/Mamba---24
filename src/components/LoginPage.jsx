@@ -70,14 +70,14 @@ export default function LoginPage({ onLogin, onSwitchToSignup }) {
             </div>
           </div>
 
-          <div className="mt-8 p-4 bg-blue-50 rounded-lg">
+          {/* <div className="mt-8 p-4 bg-blue-50 rounded-lg">
             <p className="text-xs text-blue-800 font-semibold mb-2">Demo Accounts:</p>
             <p className="text-xs text-blue-700">• patient@test.com - Patient Dashboard</p>
             <p className="text-xs text-blue-700">• therapist@test.com - Therapist Dashboard</p>
             <p className="text-xs text-blue-700">• therapist-pending@test.com - Needs Approval</p>
             <p className="text-xs text-blue-700">• admin@test.com - Admin Dashboard</p>
             <p className="text-xs text-blue-700 mt-2">Password: any</p>
-          </div>
+          </div> */}
         </div>
       </div>
 
