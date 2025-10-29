@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Search, Bell, Menu, DownloadCloud } from 'lucide-react'
+import {Menu, DownloadCloud } from 'lucide-react'
 import Avatar from 'boring-avatars'
 
 export default function Header({ userName, userRole, onMenuToggle }) {
@@ -48,13 +48,6 @@ export default function Header({ userName, userRole, onMenuToggle }) {
         <div className="flex items-center gap-3">
           {/* mobile menu button */}
           <button onClick={onMenuToggle} className="md:hidden p-2 rounded-lg hover:bg-gray-100"><Menu className="w-5 h-5 text-gray-600" /></button>
-
-          <div className="w-full max-w-xl">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input type="text" placeholder="Search..." className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-            </div>
-          </div>
         </div>
 
         <div className="flex items-center space-x-3">
@@ -65,8 +58,6 @@ export default function Header({ userName, userRole, onMenuToggle }) {
               <span className="text-sm font-medium">Install</span>
             </button>
           )}
-
-          <button className="p-2 hover:bg-gray-100 rounded-lg relative"><Bell className="w-5 h-5 text-gray-600" /><span className="absolute top-1 right-1 w-2 h-2 rounded-full" style={{backgroundColor: '#FF7A59'}}></span></button>
 
           <div className="flex items-center space-x-3">
             <div className="w-9 h-9 md:w-10 md:h-10 rounded-full overflow-hidden">

@@ -1,0 +1,58 @@
+### Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+### Build
+dist/
+.vite/
+.parcel-cache/
+/.cache/
+
+### Environment
+.env
+.env.*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+### Misc
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+### Tests / coverage
+coverage/
+coverage-final.json
+.nyc_output/
+jest.setup.js
+
+### TypeScript
+*.tsbuildinfo
+
+### Cache
+.eslintcache
+.prettiercache
+
+### Lock files (uncomment if you don't want to track specific lockfiles)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+### OS files
+ehthumbs.db
+Icon?
+Desktop.ini
+
+### Optional: editor temp files
+*~
+#*#
+.#*
+
