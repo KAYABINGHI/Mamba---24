@@ -1,28 +1,41 @@
 import React, { useState } from 'react'
 import { Heart } from 'lucide-react'
+import { loginUser, persistAuth } from '../services/api'
 
 export default function LoginPage({ onLogin, onSwitchToSignup }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const handleLogin = () => {
+  const handleLogin = async (e) => {
+    if (e && e.preventDefault) e.preventDefault()
+    setError('')
     if (!email || !password) {
       setError('Please fill in all fields')
       return
     }
 
-    let role = 'patient'
-    let status = 'approved'
-    if (email.includes('therapist')) {
-      role = 'therapist'
-      status = email.includes('pending') ? 'pending' : 'approved'
-    } else if (email.includes('admin')) {
-      role = 'admin'
-    }
+    setLoading(true)
+    try {
+      const res = await loginUser({ email, password })
+      const data = res && res.data ? res.data : res
+      // Expecting { user: {...}, token: '...' } or similar
+      const user = data.user || data
+      const token = data.token || data.accessToken || null
 
-    onLogin({ name: 'User', email, role, status }, 'token123')
+      // Persist token and user: use localStorage only if user checked Remember me,
+      // otherwise keep sessionStorage (cleared on tab close).
+      persistAuth(token, user, rememberMe)
+
+      onLogin(user, token)
+    } catch (err) {
+      const msg = err?.response?.data?.message || err?.message || 'Login failed'
+      setError(msg)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -65,19 +78,12 @@ export default function LoginPage({ onLogin, onSwitchToSignup }) {
               <button className="text-sm text-gray-600 hover:text-emerald-600">Forgot password</button>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
-              <button onClick={handleLogin} className="w-full sm:flex-1 py-3 bg-emerald-800 text-white rounded-lg font-semibold hover:bg-emerald-900">LOGIN</button>
+              <button onClick={handleLogin} disabled={loading} className="w-full sm:flex-1 py-3 bg-emerald-800 text-white rounded-lg font-semibold hover:bg-emerald-900 disabled:opacity-60">
+                {loading ? 'Logging in...' : 'LOGIN'}
+              </button>
               <button onClick={onSwitchToSignup} className="w-full sm:flex-1 py-3 border-2 border-emerald-800 text-emerald-800 rounded-lg font-semibold hover:bg-emerald-50">SIGN UP</button>
             </div>
           </div>
-
-          {/* <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-            <p className="text-xs text-blue-800 font-semibold mb-2">Demo Accounts:</p>
-            <p className="text-xs text-blue-700">• patient@test.com - Patient Dashboard</p>
-            <p className="text-xs text-blue-700">• therapist@test.com - Therapist Dashboard</p>
-            <p className="text-xs text-blue-700">• therapist-pending@test.com - Needs Approval</p>
-            <p className="text-xs text-blue-700">• admin@test.com - Admin Dashboard</p>
-            <p className="text-xs text-blue-700 mt-2">Password: any</p>
-          </div> */}
         </div>
       </div>
 

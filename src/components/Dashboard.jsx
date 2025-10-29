@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Heart, Book, MessageSquare, TrendingUp, Users, Calendar, Clock } from 'lucide-react'
 import Sidebar from './Sidebar'
 import Header from './Header'
@@ -7,13 +7,22 @@ import JournalModal from './JournalModal'
 import CommunityPage from './CommunityPage'
 import TherapistsPage from './TherapistsPage'
 
-export default function Dashboard({ userRole, onLogout }) {
+export default function Dashboard({ user, token, onLogout }) {
   const [activeTab, setActiveTab] = useState('overview')
   const [moodEntries, setMoodEntries] = useState([])
   const [journalEntries, setJournalEntries] = useState([])
   const [showMoodModal, setShowMoodModal] = useState(false)
   const [showJournalModal, setShowJournalModal] = useState(false)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
+  
+  useEffect(() => {
+    if (!user) {
+      if (onLogout) onLogout()
+    }
+  }, [user, onLogout])
+
+  const userRole = user?.role
+  const userName = user?.username || user?.name || 'User Name'
 
   const renderContent = () => {
     if (activeTab === 'logout') {
@@ -193,7 +202,7 @@ export default function Dashboard({ userRole, onLogout }) {
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} userRole={userRole} mobileOpen={mobileSidebarOpen} onClose={() => setMobileSidebarOpen(false)} />
       <div className="flex-1 flex flex-col">
-        <Header userName="User Name" userRole={userRole} onMenuToggle={() => setMobileSidebarOpen(v => !v)} />
+        <Header userName={userName} userRole={userRole} onMenuToggle={() => setMobileSidebarOpen(v => !v)} />
         <div className="flex-1 overflow-auto">{renderContent()}</div>
       </div>
     </div>

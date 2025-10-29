@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import { Heart } from 'lucide-react'
+import { registerUser, persistAuth } from '../services/api'
 
 export default function SignupPage({ onSignup, onSwitchToLogin }) {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', role: 'patient', specialty: '' })
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const handleSignup = () => {
+  const handleSignup = async (e) => {
+    if (e && e.preventDefault) e.preventDefault()
+    setError('')
     if (!formData.name || !formData.email || !formData.password) {
       setError('Please fill in all fields')
       return
@@ -14,7 +18,28 @@ export default function SignupPage({ onSignup, onSwitchToLogin }) {
       setError('Please enter your specialty')
       return
     }
-    onSignup({ ...formData, status: formData.role === 'therapist' ? 'pending' : 'approved' }, 'token123')
+
+    setLoading(true)
+    try {
+      // Log so we can inspect what's being sent to the backend
+      console.log('Register:', formData)
+      const res = await registerUser(formData)
+      const data = res && res.data ? res.data : res
+      const user = data.user || data
+  const token = data.token || data.accessToken || null
+
+  // Persist token/user in sessionStorage by default after signup.
+  persistAuth(token, user, false)
+
+  onSignup(user, token)
+    } catch (err) {
+      console.error('Signup error response:', err?.response)
+      const serverData = err?.response?.data
+      const msg = serverData?.message || serverData || err?.message || 'Signup failed'
+      setError(typeof msg === 'object' ? JSON.stringify(msg) : msg)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -69,7 +94,7 @@ export default function SignupPage({ onSignup, onSwitchToLogin }) {
               </div>
             )}
 
-            <button onClick={handleSignup} className="w-full py-3 bg-emerald-800 text-white rounded-lg font-semibold hover:bg-emerald-900">SIGN UP</button>
+            <button onClick={handleSignup} disabled={loading} className="w-full py-3 bg-emerald-800 text-white rounded-lg font-semibold hover:bg-emerald-900 disabled:opacity-60">{loading ? 'Creating...' : 'SIGN UP'}</button>
 
             <p className="text-center text-sm text-gray-600">Already have an account?{' '}<button onClick={onSwitchToLogin} className="text-emerald-700 font-semibold">Login</button></p>
           </div>
